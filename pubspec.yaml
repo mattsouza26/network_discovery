@@ -1,5 +1,5 @@
 name: network_discovery
-description: Package for discovery address in the network.
+description: Package for discovery host and ports in the network.
 version: 1.0.0
 homepage: https://github.com/mattsouza26/network_discovery
 
