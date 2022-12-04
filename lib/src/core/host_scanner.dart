@@ -70,7 +70,7 @@ class HostScanner {
               !(element.name == "tun0" || element.name == "wlan0"));
           return interface.addresses.first.address;
         } catch (ex) {
-          throw "Couldn't get IP Address";
+          return "";
         }
       }
     }

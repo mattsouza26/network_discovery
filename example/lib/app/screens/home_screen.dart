@@ -107,6 +107,7 @@ void discoveryDevices(IsolateMessageModel message) async {
   final String subnet = address.substring(0, address.lastIndexOf('.'));
   //create stream for listener
   final stream = NetworkDiscovery.discoverMultiplePorts(subnet, ports);
+
   //await for the listener finish
   await stream.listen((data) {
     //create device from data

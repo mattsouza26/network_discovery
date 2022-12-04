@@ -3,6 +3,10 @@ import 'core/host_scanner.dart';
 import 'core/port_scanner.dart';
 
 class NetworkDiscovery extends HostScanner with PortScanner {
+  static Future<String> discoverDeviceIpAddress() {
+    return HostScanner.discoverDeviceIpAddress();
+  }
+
   static Stream<HostActive> discoverAllPingableDevices(
     String subnet, {
     int firstHostId = 1,
@@ -48,9 +52,5 @@ class NetworkDiscovery extends HostScanner with PortScanner {
   }) {
     return PortScanner.discoverFromAddressMultiplePorts(address, ports,
         timeout: timeout);
-  }
-
-  static Future<String> discoverDeviceIpAddress() {
-    return HostScanner.discoverDeviceIpAddress();
   }
 }
