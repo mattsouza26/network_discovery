@@ -2,11 +2,11 @@
 
 Dart/Flutter library that allows to ping IP subnet and discover network devices.
 
-Could be used to find printers (for example, on port 9100) and any other devices and services in local network.
+Could be used to find http server (for example, on port 80) and any other devices and services in local network.
 
 The device should be connected to a Router.
 
-The library tested on Android,iOS, Windows and Linux platforms, should work on yours mac but not tested.
+The library tested on Android,iOS,Windows and Linux platforms, should work on yours mac but not tested.
 
 ## Getting Started
 
