@@ -27,8 +27,7 @@ if(deviceIP.isNotEmpty){
     debugPrint("Couldn't get IP Address");
 }
 ```
-
-Discover available host on network devices in a given subnet:
+Discover available host on network in a given subnet:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
 
@@ -37,11 +36,11 @@ final stream = NetworkDiscovery.discoverAllPingableDevices('192.168.0');
 int availableHost = 0;
 stream.listen((HostActive host) {
     print('Found device: ${host.ip}, isActive: ${host.isActive}');
-    if(host.isActive)
+    if(host.isActive){
         found++;
+    }
 }).onDone(() => print('Finish. Available $availableHost host device(s)'));
 ```
-
 Discover available network devices in a given subnet on a given port:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
@@ -55,14 +54,40 @@ stream.listen((NetworkAddress addr) {
     print('Found device: ${addr.ip}:$port');
 }).onDone(() => print('Finish. Found $found device(s)'));
 ```
-
-Discover available network devices in a given subnet on a multiple given port:
+Discover available network devices on a given subnet on various given ports:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
 
 const List<int> ports = [80, 443, 445, 8080];
 
 final stream = NetworkDiscovery.discoverMultiplePorts('192.168.0', ports);
+
+int found = 0;
+stream.listen((NetworkAddress addr) {
+    found++;
+    print('Found device: ${addr.ip}:$port');
+}).onDone(() => print('Finish. Found $found device(s)'));
+```
+Check an available port at a given address on a given port:
+```dart
+import 'package:network_discovery/network_discovery.dart';
+
+const port = 80;
+final stream = NetworkDiscovery.discoverFromAddress('192.168.0.2', port);
+
+int found = 0;
+stream.listen((NetworkAddress addr) {
+    found++;
+    print('Found device: ${addr.ip}:$port');
+}).onDone(() => print('Finish. Found $found device(s)'));
+```
+Check available ports at a given address on various given ports:
+```dart
+import 'package:network_discovery/network_discovery.dart';
+
+const List<int> ports = [80, 443, 445, 8080];
+
+final stream = NetworkDiscovery.discoverFromAddressMultiplePorts('192.168.0.2', ports);
 
 int found = 0;
 stream.listen((NetworkAddress addr) {
