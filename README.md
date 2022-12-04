@@ -2,7 +2,7 @@
 
 Dart/Flutter library that allows to ping IP subnet and discover network devices.
 
-Could be used to find available host or services like http server (e.g. on port 80) and any other service on local network.
+Could be used to find available host or services like http server (e.g. on port 80) and any other services on local network.
 
 The device should be connected to a Router (a.s WIFI or Wired connection).
 
