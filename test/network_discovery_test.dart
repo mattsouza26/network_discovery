@@ -5,6 +5,18 @@ import 'package:network_discovery/src/utils/utils.dart';
 
 void main() async {
   group('Testing Host Scanner', () {
+    test('Running check dt', () async {
+      final ip = await NetworkDiscovery.discoverDeviceIpAddress();
+      print(ip);
+      final stream = NetworkDiscovery.discoverAllPingableDevices("192.168.1");
+      await stream.listen((host) {
+        //show only is pingable
+        if (host.isActive) {
+          debugPrint(host.ip);
+        }
+      }).asFuture();
+    });
+
     test('Running check deviceIP is valid IP Address test', () async {
       final ip = await NetworkDiscovery.discoverDeviceIpAddress();
       expect(true, Utils.isValidAddress(ip));
