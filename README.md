@@ -27,6 +27,25 @@ if(deviceIP.isNotEmpty){
     debugPrint("Couldn't get IP Address");
 }
 ```
+Discover an available port at a given address on a given port:
+```dart
+import 'package:network_discovery/network_discovery.dart';
+
+// Must be async function
+const port = 80;
+final device = NetworkDiscovery.discoverFromAddress('192.168.0.2', port);
+print(device.toString());
+```
+Discover available ports at a given address on various given ports:
+```dart
+import 'package:network_discovery/network_discovery.dart';
+
+// Must be async function
+const List<int> ports = [80, 443, 445, 8080];
+final device = await NetworkDiscovery.discoverFromAddressMultiplePorts('192.168.0.1', ports);
+print(device.toString());
+```
+
 Discover available host on network in a given subnet:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
@@ -67,21 +86,4 @@ stream.listen((NetworkAddress addr) {
     found++;
     print('Found device: ${addr.ip}:$port');
 }).onDone(() => print('Finish. Found $found device(s)'));
-```
-Discover an available port at a given address on a given port:
-```dart
-import 'package:network_discovery/network_discovery.dart';
-
-const port = 80;
-final device = NetworkDiscovery.discoverFromAddress('192.168.0.2', port);
-print(device.toString());
-
-```
-Discover available ports at a given address on various given ports:
-```dart
-import 'package:network_discovery/network_discovery.dart';
-
-const List<int> ports = [80, 443, 445, 8080];
-final device = await NetworkDiscovery.discoverFromAddressMultiplePorts('192.168.0.1', ports);
-print(device.toString());
 ```
