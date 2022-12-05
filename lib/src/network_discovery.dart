@@ -24,7 +24,7 @@ class NetworkDiscovery extends HostScanner with PortScanner {
   static Stream<NetworkAddress> discover(
     String subnet,
     int port, {
-    Duration timeout = const Duration(seconds: 3),
+    Duration timeout = const Duration(seconds: 2),
   }) {
     return PortScanner.discover(subnet, port, timeout: timeout);
   }
@@ -32,23 +32,23 @@ class NetworkDiscovery extends HostScanner with PortScanner {
   static Stream<NetworkAddress> discoverMultiplePorts(
     String subnet,
     List<int> ports, {
-    Duration timeout = const Duration(seconds: 3),
+    Duration timeout = const Duration(seconds: 2),
   }) {
     return PortScanner.discoverMultiplePorts(subnet, ports, timeout: timeout);
   }
 
-  static Stream<NetworkAddress> discoverFromAddress(
+  static Future<NetworkAddress> discoverFromAddress(
     String address,
     int port, {
-    Duration timeout = const Duration(seconds: 3),
+    Duration timeout = const Duration(seconds: 2),
   }) {
     return PortScanner.discoverFromAddress(address, port, timeout: timeout);
   }
 
-  static Stream<NetworkAddress> discoverFromAddressMultiplePorts(
+  static Future<NetworkAddress> discoverFromAddressMultiplePorts(
     String address,
     List<int> ports, {
-    Duration timeout = const Duration(seconds: 3),
+    Duration timeout = const Duration(seconds: 2),
   }) {
     return PortScanner.discoverFromAddressMultiplePorts(address, ports,
         timeout: timeout);

@@ -1,49 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:network_discovery/src/network_discovery.dart';
+import 'package:network_discovery/src/utils/utils.dart';
+
 void main() async {
-  // String address = '192.168.1.150';
+  group('Testing Host Scanner', () {
+    test('Running check deviceIP is valid IP Address test', () async {
+      final ip = await NetworkDiscovery.discoverDeviceIpAddress();
+      expect(true, Utils.isValidAddress(ip));
+    });
 
-  // print(Utils.isValidAddress(address));
+    test('Running discover available host on network in a given subnet test',
+        () async {
+      final stream = NetworkDiscovery.discoverAllPingableDevices("192.168.1");
+      await stream.listen((host) {
+        //show only is pingable
+        if (host.isActive) {
+          debugPrint(host.ip);
+        }
+      }).asFuture();
+    });
+  });
 
-  // group('Testing Host Scanner', () {
-  //   test('Running getMaxHost tests', () {
-  //     expect(HostScanner.getMaxHost("10.0.0.0"), HostScanner.classASubnets);
-  //     expect(HostScanner.getMaxHost("164.0.0.0"), HostScanner.classBSubnets);
-  //     expect(HostScanner.getMaxHost("200.0.0.0"), HostScanner.classCSubnets);
-  //   });
-  // });
-  // String address = '192.168.1.150';
-  // final String subnet = address.substring(0, address.lastIndexOf('.'));
-  // final host = HostScanner.getAllPingableDevices(subnet);
-  // List<HostActive> hostActive = [];
-  // List<NetworkAddress> listNetworkAddress = [];
-  // await host.listen((event) {
-  //   if (event.isActive) {
-  //     hostActive.add(event);
-  //   }
-  // }).asFuture();
+  group('Testing Port Scanner', () {
+    test(
+        'Running discover available network devices in a given subnet on a given port test',
+        () async {
+      final stream = NetworkDiscovery.discover("192.168.1", 80);
+      await stream.listen((addr) {
+        debugPrint(addr.ip);
+      }).asFuture();
+    });
 
-  // print(hostActive);
-  // final ports = PortScanner.discoverMultiplePorts(subnet, [13579]);
-  // await ports.listen((event) {
-  //   listNetworkAddress.add(event);
-  // }).asFuture();
-  // print(listNetworkAddress);
+    test(
+        'Running discover available network devices on a given subnet on various given ports test',
+        () async {
+      final stream = NetworkDiscovery.discoverMultiplePorts(
+          "192.168.1", [80, 443, 3000, 448, 13579]);
+      await stream.listen((host) {
+        debugPrint(host.toString());
+      }).asFuture();
+    });
 
-  // final stream = PortScanner.discoverFromHostMultiplePorts(
-  //     address, List.generate(1024, (index) => index * 20));
-  // await stream.listen((host) {
-  //   //Same host can be emitted multiple times
-  //   //Use Set<ActiveHost> instead of List<ActiveHost>
-  //   print(host);
-  // }, onDone: () {
-  //   print('Scan completed');
-  // }).asFuture();
+    test(
+        'Running check an available port at a given address on a given port test',
+        () async {
+      final device =
+          await NetworkDiscovery.discoverFromAddress("192.168.1.1", 80);
+      debugPrint(device.toString());
+    });
 
-  // or You can also get address using network_info_plus package
-  // final String? address = await (NetworkInfo().getWifiIP());
-  // final String subnet = address.substring(0, address.lastIndexOf('.'));
-  // print(await HostScanner.getHostFromPing(address, const Duration(seconds: 5)));
-
-  // final oldNet = NetworkAddress("192.168.1.150", openPorts: []);
-  // final newNet = NetworkAddress("192.168.1.150", openPorts: [2]);
-  // print(oldNet == newNet);
+    test(
+        'Running check available ports at a given address on various given ports test',
+        () async {
+      final device = await NetworkDiscovery.discoverFromAddressMultiplePorts(
+          "192.168.1.1", [3000, 80, 443, 13579, 58526]);
+      debugPrint(device.toString());
+    });
+  });
 }
