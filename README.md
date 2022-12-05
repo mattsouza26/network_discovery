@@ -68,7 +68,7 @@ stream.listen((NetworkAddress addr) {
     print('Found device: ${addr.ip}:$port');
 }).onDone(() => print('Finish. Found $found device(s)'));
 ```
-Check an available port at a given address on a given port:
+Discover an available port at a given address on a given port:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
 
@@ -77,7 +77,7 @@ final device = NetworkDiscovery.discoverFromAddress('192.168.0.2', port);
 print(device.toString());
 
 ```
-Check available ports at a given address on various given ports:
+Discover available ports at a given address on various given ports:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
 
