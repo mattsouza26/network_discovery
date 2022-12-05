@@ -12,15 +12,17 @@ class PortScanner {
     if (port < 1 || port > 65535) {
       throw 'Incorrect port';
     }
+
     final out = StreamController<NetworkAddress>();
     final futures = <Future<Socket>>[];
 
     for (int i = 1; i < 256; ++i) {
       final host = '$subnet.$i';
-      final Future<Socket> f = Utils.getPortFromPing(host, port, timeout);
-      futures.add(f);
-      f.then((socket) {
-        socket.destroy();
+      final Future<Socket> socket = Utils.getPortFromPing(host, port, timeout);
+      futures.add(socket);
+
+      socket.then((Socket s) {
+        s.destroy();
         out.sink.add(NetworkAddress(host, openPorts: [port]));
       }).catchError((dynamic e) {
         if (e is! SocketException) {
@@ -51,11 +53,12 @@ class PortScanner {
       final networkAddress = NetworkAddress(host, openPorts: List.from([]));
 
       for (var port in ports) {
-        final Future<Socket> f = Utils.getPortFromPing(host, port, timeout);
-        futures.add(f);
+        final Future<Socket> socket =
+            Utils.getPortFromPing(host, port, timeout);
+        futures.add(socket);
 
-        f.then((socket) async {
-          socket.destroy();
+        socket.then((Socket s) async {
+          s.destroy();
           networkAddress.openPorts.add(port);
         }).catchError((dynamic e) async {
           if (e is! SocketException) {
@@ -91,11 +94,13 @@ class PortScanner {
     if (port < 1 || port > 65535) {
       throw 'Incorrect port';
     }
-    final Future<Socket> f =
+
+    final Future<Socket> socket =
         Utils.getPortFromPing(address, port, const Duration(seconds: 2));
     final networkAddress = NetworkAddress(address, openPorts: List.from([]));
-    await f.then((socket) {
-      socket.destroy();
+
+    await socket.then((Socket s) {
+      s.destroy();
       networkAddress.openPorts.add(port);
     }).catchError((dynamic e) {
       if (e is! SocketException) {
@@ -104,83 +109,6 @@ class PortScanner {
     });
     return networkAddress;
   }
-
-  // static Stream<NetworkAddress> discoverFromAddress(
-  //   String address,
-  //   int port, {
-  //   required Duration timeout,
-  // }) {
-  //   if (!Utils.isValidAddress(address)) {
-  //     throw "Provide a valid IPADDRESS";
-  //   }
-  //   if (port < 1 || port > 65535) {
-  //     throw 'Incorrect port';
-  //   }
-
-  //   final out = StreamController<NetworkAddress>();
-  //   final futures = <Future<Socket>>[];
-  //   final host = address;
-  //   final Future<Socket> f = Utils.getPortFromPing(host, port, timeout);
-  //   futures.add(f);
-  //   f.then((socket) {
-  //     socket.destroy();
-  //     out.sink.add(NetworkAddress(host, openPorts: [port]));
-  //   }).catchError((dynamic e) {
-  //     if (e is! SocketException) {
-  //       throw e;
-  //     }
-  //   });
-  //   Future.wait<Socket>(futures)
-  //       .then<void>((sockets) => out.close())
-  //       .catchError((dynamic e) => out.close());
-
-  //   return out.stream;
-  // }
-
-  // static Stream<NetworkAddress> discoverFromAddressMultiplePorts(
-  //   String address,
-  //   List<int> ports, {
-  //   required Duration timeout,
-  // }) {
-  //   if (!Utils.isValidAddress(address)) {
-  //     throw "Provide a valid IPADDRESS";
-  //   }
-  //   if (!Utils.isValidPort(ports)) {
-  //     throw 'Provide a valid port range between 0 to 65535';
-  //   }
-
-  //   final out = StreamController<NetworkAddress>();
-  //   final futures = <Future<Socket>>[];
-  //   final host = address;
-  //   final newNetworkAddress = NetworkAddress(host, openPorts: List.from([]));
-
-  //   for (var port in ports) {
-  //     final Future<Socket> f = Utils.getPortFromPing(host, port, timeout);
-  //     futures.add(f);
-  //     f.then((socket) async {
-  //       socket.destroy();
-  //       newNetworkAddress.openPorts.add(port);
-  //       //add to stream at the last port
-  //       if (port == ports.last) {
-  //         out.sink.add(newNetworkAddress);
-  //       }
-  //     }).catchError((dynamic e) async {
-  //       if (e is! SocketException) {
-  //         throw e;
-  //       }
-  //       //in case the last port is not open but the host has other ports open
-  //       if (port == ports.last && newNetworkAddress.openPorts.isNotEmpty) {
-  //         out.sink.add(newNetworkAddress);
-  //       }
-  //     });
-  //   }
-
-  //   Future.wait<Socket>(futures)
-  //       .then<void>((sockets) => out.close())
-  //       .catchError((dynamic e) => out.close());
-
-  //   return out.stream;
-  // }
 
   static Future<NetworkAddress> discoverFromAddressMultiplePorts(
     String address,
@@ -200,10 +128,10 @@ class PortScanner {
     final networkAddress = NetworkAddress(host, openPorts: List.from([]));
 
     for (var port in ports) {
-      final Future<Socket> f = Utils.getPortFromPing(host, port, timeout);
-      futures.add(f);
-      f.then((socket) async {
-        socket.destroy();
+      final Future<Socket> socket = Utils.getPortFromPing(host, port, timeout);
+      futures.add(socket);
+      socket.then((Socket s) async {
+        s.destroy();
         networkAddress.openPorts.add(port);
       }).catchError((dynamic e) {
         if (e is! SocketException) {
