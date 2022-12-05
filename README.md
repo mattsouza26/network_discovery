@@ -19,6 +19,7 @@ import 'package:network_discovery/network_discovery.dart';
 
 // Must be async function
 final String deviceIP = await NetworkDiscovery.discoverDeviceIpAddress();
+
 if(deviceIP.isNotEmpty){
     print(deviceIP);
     // Can use to get subnet from IP Address
@@ -34,6 +35,7 @@ import 'package:network_discovery/network_discovery.dart';
 // Must be async function
 const port = 80;
 final device = await NetworkDiscovery.discoverFromAddress('192.168.0.1', port);
+
 print(device.toString());
 ```
 Discover available ports at a given address and various ports:
@@ -43,9 +45,9 @@ import 'package:network_discovery/network_discovery.dart';
 // Must be async function
 const List<int> ports = [80, 443, 445, 8080];
 final device = await NetworkDiscovery.discoverFromAddressMultiplePorts('192.168.0.1', ports);
+
 print(device.toString());
 ```
-
 Discover available host on network in a given subnet:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
@@ -78,7 +80,6 @@ Discover available network devices on a given subnet and various ports:
 import 'package:network_discovery/network_discovery.dart';
 
 const List<int> ports = [80, 443, 445, 8080];
-
 final stream = NetworkDiscovery.discoverMultiplePorts('192.168.0', ports);
 
 int found = 0;
