@@ -2,6 +2,7 @@ name: network_discovery
 description: Package for discovery host and ports in the network.
 version: 1.0.0
 homepage: https://github.com/mattsouza26/network_discovery
+repository: https://github.com/mattsouza26/network_discovery
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
