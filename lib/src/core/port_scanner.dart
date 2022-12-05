@@ -10,9 +10,8 @@ class PortScanner {
     required Duration timeout,
   }) {
     if (port < 1 || port > 65535) {
-      throw 'Incorrect port';
+      throw 'Provide a valid port range between 0 to 65535';
     }
-
     final out = StreamController<NetworkAddress>();
     final futures = <Future<Socket>>[];
 
@@ -51,7 +50,6 @@ class PortScanner {
     for (int i = 1; i < 256; ++i) {
       final host = '$subnet.$i';
       final networkAddress = NetworkAddress(host, openPorts: List.from([]));
-
       for (var port in ports) {
         final Future<Socket> socket =
             Utils.getPortFromPing(host, port, timeout);
@@ -70,7 +68,6 @@ class PortScanner {
       Future.wait<Socket>(futures).then<void>((sockets) {
         out.sink.add(networkAddress);
       }).catchError((dynamic e) {
-        // if networkAddress have some ports open but have some closed
         if (networkAddress.openPorts.isNotEmpty) {
           out.sink.add(networkAddress);
         }
@@ -80,6 +77,7 @@ class PortScanner {
     Future.wait<Socket>(futures)
         .then<void>((sockets) => out.close())
         .catchError((dynamic e) => out.close());
+
     return out.stream;
   }
 
@@ -92,7 +90,7 @@ class PortScanner {
       throw "Provide a valid ip address";
     }
     if (port < 1 || port > 65535) {
-      throw 'Incorrect port';
+      throw 'Provide a valid port range between 0 to 65535';
     }
 
     final Future<Socket> socket =
@@ -116,7 +114,7 @@ class PortScanner {
     required Duration timeout,
   }) async {
     if (!Utils.isValidAddress(address)) {
-      throw "Provide a valid IPADDRESS";
+      throw "Provide a valid ip address";
     }
     if (!Utils.isValidPort(ports)) {
       throw 'Provide a valid port range between 0 to 65535';

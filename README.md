@@ -20,23 +20,23 @@ import 'package:network_discovery/network_discovery.dart';
 // Must be async function
 final String deviceIP = await NetworkDiscovery.discoverDeviceIpAddress();
 if(deviceIP.isNotEmpty){
-    debugPrint(deviceIP);
+    print(deviceIP);
     // Can use to get subnet from IP Address
     final String subnet = address.substring(0, address.lastIndexOf('.'));
 }else{
-    debugPrint("Couldn't get IP Address");
+    print("Couldn't get IP Address");
 }
 ```
-Discover an available port at a given address on a given port:
+Discover an available port at a given address and port:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
 
 // Must be async function
 const port = 80;
-final device = NetworkDiscovery.discoverFromAddress('192.168.0.2', port);
+final device = NetworkDiscovery.discoverFromAddress('192.168.0.1', port);
 print(device.toString());
 ```
-Discover available ports at a given address on various given ports:
+Discover available ports at a given address and various ports:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
 
@@ -60,7 +60,7 @@ stream.listen((HostActive host) {
     }
 }).onDone(() => print('Finish. Available $availableHost host device(s)'));
 ```
-Discover available network devices in a given subnet on a given port:
+Discover available network devices in a given subnet and port:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
 
@@ -73,7 +73,7 @@ stream.listen((NetworkAddress addr) {
     print('Found device: ${addr.ip}:$port');
 }).onDone(() => print('Finish. Found $found device(s)'));
 ```
-Discover available network devices on a given subnet on various given ports:
+Discover available network devices on a given subnet and various ports:
 ```dart
 import 'package:network_discovery/network_discovery.dart';
 

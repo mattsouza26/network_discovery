@@ -3,14 +3,6 @@ import 'core/host_scanner.dart';
 import 'core/port_scanner.dart';
 
 class NetworkDiscovery {
-  static final NetworkDiscovery _instance = NetworkDiscovery._();
-
-  factory NetworkDiscovery() {
-    return _instance;
-  }
-
-  NetworkDiscovery._();
-
   static Future<String> discoverDeviceIpAddress() {
     return HostScanner.discoverDeviceIpAddress();
   }
