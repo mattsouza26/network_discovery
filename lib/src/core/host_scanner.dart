@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:network_discovery/src/models/host_active.dart';
-import 'package:network_discovery/src/utils/utils.dart';
+import '../models/host_active.dart';
+import '../utils/utils.dart';
 import 'dart:io';
 
 class HostScanner {
