@@ -33,7 +33,7 @@ import 'package:network_discovery/network_discovery.dart';
 
 // Must be async function
 const port = 80;
-final device = NetworkDiscovery.discoverFromAddress('192.168.0.1', port);
+final device = await NetworkDiscovery.discoverFromAddress('192.168.0.1', port);
 print(device.toString());
 ```
 Discover available ports at a given address and various ports:
