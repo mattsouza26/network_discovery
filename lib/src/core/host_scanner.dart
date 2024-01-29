@@ -7,24 +7,16 @@ import 'dart:io';
 class HostScanner {
   static Stream<HostActive> discoverAllPingableDevices(
     String subnet, {
-    required int firstHostId,
-    required int lastHostId,
+    required List<int> hostIds,
     required Duration timeout,
     required bool resultsInAddressAscendingOrder,
   }) async* {
     final int maxEnd = Utils.getMaxHost(subnet);
-    if (firstHostId > lastHostId ||
-        firstHostId < 1 ||
-        lastHostId < 1 ||
-        firstHostId > maxEnd ||
-        lastHostId > maxEnd) {
-      throw 'Invalid subnet range or firstHostId < lastHostId is not true';
-    }
-    final int lastValidSubnet = min(lastHostId, maxEnd);
+    
     final out = StreamController<HostActive>();
     final futures = <Future<HostActive>>[];
 
-    for (int i = firstHostId; i <= lastValidSubnet; i++) {
+    for (final int i in hostIds) {
       final host = '$subnet.$i';
       final Future<HostActive> f = Utils.getHostFromPing(host, timeout);
       futures.add(f);

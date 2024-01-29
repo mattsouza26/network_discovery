@@ -9,14 +9,12 @@ class NetworkDiscovery {
 
   static Stream<HostActive> discoverAllPingableDevices(
     String subnet, {
-    int firstHostId = 1,
-    int lastHostId = 254,
+    required List<int> hostIds,
     Duration timeout = const Duration(seconds: 1),
     bool resultsInAddressAscendingOrder = true,
   }) {
     return HostScanner.discoverAllPingableDevices(subnet,
-        firstHostId: firstHostId,
-        lastHostId: lastHostId,
+        hostIds: hostIds,
         timeout: timeout,
         resultsInAddressAscendingOrder: resultsInAddressAscendingOrder);
   }
