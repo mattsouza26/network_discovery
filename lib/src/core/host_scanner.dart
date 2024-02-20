@@ -5,8 +5,7 @@ import '../utils/utils.dart';
 import 'dart:io';
 
 class HostScanner {
-  static Stream<HostActive> discoverAllPingableDevices(
-    String subnet, {
+  static Stream<HostActive> discoverAllPingableDevices(String subnet, {
     required int firstHostId,
     required int lastHostId,
     required Duration timeout,
@@ -50,29 +49,31 @@ class HostScanner {
   }
 
   static Future<String> discoverDeviceIpAddress() async {
-    final interfaces = await NetworkInterface.list(
-        type: InternetAddressType.IPv4, includeLinkLocal: true);
+    final interfaces = await NetworkInterface.list(type: InternetAddressType.IPv4, includeLinkLocal: true);
     try {
       // Try VPN connection first
-      NetworkInterface vpnInterface =
-          interfaces.firstWhere((element) => element.name == "tun0");
+      NetworkInterface vpnInterface = interfaces.firstWhere((element) => element.name == "tun0");
       return vpnInterface.addresses.first.address;
     } on StateError {
       // Try wlan connection next
       try {
-        NetworkInterface interface =
-            interfaces.firstWhere((element) => element.name == "wlan0");
+        NetworkInterface interface = interfaces.firstWhere((element) => element.name == "wlan0");
         return interface.addresses.first.address;
       } catch (ex) {
-        // Try any other connection next
+        // Try en connection next
         try {
-          NetworkInterface interface = interfaces.firstWhere((element) =>
-              !(element.name == "tun0" || element.name == "wlan0"));
+          NetworkInterface interface = interfaces.firstWhere((element) => element.name == "en0");
           return interface.addresses.first.address;
         } catch (ex) {
-          return "";
+          // Try any other connection next
+          try {
+            NetworkInterface interface = interfaces
+                .firstWhere((element) => !(element.name == "tun0" || element.name == "wlan0" || element.name == "en0"));
+            return interface.addresses.first.address;
+          } catch (ex) {
+            return "";
+          }
         }
       }
     }
   }
-}
